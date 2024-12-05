@@ -1,9 +1,7 @@
 package com.example.jooqtest.film
 
 import org.jooq.DSLContext
-import org.jooq.generated.tables.JActor
-import org.jooq.generated.tables.JFilm
-import org.jooq.generated.tables.JFilmActor
+import org.jooq.generated.tables.*
 import org.jooq.generated.tables.pojos.Film
 import org.jooq.impl.DSL
 import org.springframework.stereotype.Repository
@@ -46,6 +44,24 @@ class FilmRepository(
             .offset((page - 1) * pageSize)
             .limit(pageSize)
             .fetchInto(FilmWithActor::class.java)
+    }
+
+    fun findFilmWithCategories(page: Long, pageSize: Long): List<FilmWithCategory> {
+        val FILM_CATEGORY = JFilmCategory.FILM_CATEGORY
+        val CATEGORY = JCategory.CATEGORY
+
+         return dslContext.select(
+            FILM,
+            FILM_CATEGORY,
+            CATEGORY
+        ).from(FILM)
+        .join(FILM_CATEGORY)
+             .on(FILM.FILM_ID.eq(FILM_CATEGORY.FILM_ID))
+             .join(CATEGORY)
+             .on(FILM_CATEGORY.CATEGORY_ID.eq(CATEGORY.CATEGORY_ID))
+             .offset((page - 1) * pageSize)
+             .limit(pageSize)
+             .fetchInto(FilmWithCategory::class.java)
     }
 
 
