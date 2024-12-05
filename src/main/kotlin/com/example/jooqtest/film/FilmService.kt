@@ -9,9 +9,13 @@ class FilmService(
 
     fun getFilmActorPageResponse(page: Long, pageSize: Long): FilmWithActorPagedResponse {
         val findFilmWithActorList = filmRepository.findFilmWithActorList(page, pageSize)
-        println(findFilmWithActorList.stream().forEach { println(it.getFilmId()) })
         val pagedResponse = PagedResponse(page, pageSize)
         return FilmWithActorPagedResponse(pagedResponse, findFilmWithActorList)
     }
 
+    fun getFilmCategoryPageResponse(page: Long, pageSize: Long): FilmWithCategoriesResponse {
+        val findFilmWithCategories = filmRepository.findFilmWithCategories(page, pageSize)
+        val pagedResponse = PagedResponse(page, pageSize)
+        return FilmWithCategoriesResponse(pagedResponse, findFilmWithCategories)
+    }
 }
